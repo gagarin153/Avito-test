@@ -4,6 +4,12 @@ class AdsViewController: UIViewController {
     
     private var screenDataResult: ScreenDataResult?
     private var timer: Timer?
+    private var currentSelectedIndexPath:  IndexPath? {
+        didSet {
+            if currentSelectedIndexPath != nil { selectButton.isEnabled = true}
+            else { selectButton.isEnabled = false }
+        }
+    }
     
     private let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
@@ -52,9 +58,9 @@ class AdsViewController: UIViewController {
         button.setTitle("", for: .normal)
         let radius: CGFloat = 5.0
         button.layer.cornerRadius = radius
-        //        button.addTarget(self, action: #selector(selectButtonStartTouch), for: .touchDown)
-        //        button.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
-        //        button.addTarget(self, action: #selector(selectButtonCancelTapped), for: .touchDragExit)
+        button.addTarget(self, action: #selector(selectButtonStartTouch), for: .touchDown)
+        button.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(selectButtonCancelTapped), for: .touchDragExit)
         button.isEnabled = false
         return button
     }()
@@ -156,24 +162,67 @@ class AdsViewController: UIViewController {
         self.adsCollectionViewRefreshControl.endRefreshing()
     }
     
+    
+    @objc private func selectButtonStartTouch (_ sender: UIButton) {
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .init(scaleX:0.9, y: 0.9)
+        }
+        self.selectButton.backgroundColor = .lightGray
+    }
+    
+    @objc private func selectButtonTapped (_ sender: UIButton) {
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+        }
+        self.selectButton.backgroundColor = .softBlue
+    }
+    
+    @objc private func selectButtonCancelTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+        }
+        self.selectButton.backgroundColor = .softBlue
+    }
+    
 }
 
-extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return screenDataResult?.list.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.reuseIdentifier, for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
         let screenDataResultlistItem = screenDataResult?.list[indexPath.item]
-        
         cell.resultListItem = screenDataResultlistItem
+        
+        if indexPath != self.currentSelectedIndexPath  {
+            cell.deselect()
+        } else if indexPath == self.currentSelectedIndexPath { // Чтобы возвращать выделение после рефреша коллекции
+            cell.select()
+        }
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if self.currentSelectedIndexPath != indexPath {
+            
+            if let currentSelectedIndexPath = self.currentSelectedIndexPath, let cellWillDeselect = self.adsCollectionView.cellForItem(at: currentSelectedIndexPath) as? AdCollectionViewCell {
+                cellWillDeselect.deselect()  // Если использовать метод DidDeselectItemAt, он не убирает выделение после рефреша
+            }
+            
+            if let cellWillSelect = self.adsCollectionView.cellForItem(at: indexPath) as? AdCollectionViewCell {
+                self.currentSelectedIndexPath = indexPath
+                cellWillSelect.select()
+            }
+        } else {
+            if let currentSelectedIndexPath = self.currentSelectedIndexPath, let cellWillDeselect = self.adsCollectionView.cellForItem(at: currentSelectedIndexPath) as? AdCollectionViewCell {
+                self.currentSelectedIndexPath = nil
+                cellWillDeselect.deselect()
+            }
+        }
     }
 }
