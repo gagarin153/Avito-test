@@ -175,6 +175,9 @@ class AdsViewController: UIViewController {
             sender.transform = .identity
         }
         self.selectButton.backgroundColor = .softBlue
+        guard let index = currentSelectedIndexPath?.row, let message = screenDataResult?.list[index].title
+        else { return }
+        Alert.showSelectedServiceAlert(on: self, withSelectedService: message)
     }
     
     @objc private func selectButtonCancelTapped(_ sender: UIButton) {
