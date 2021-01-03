@@ -65,16 +65,25 @@ class AdsViewController: UIViewController {
         return button
     }()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.view.backgroundColor = .white
         self.setUpnavigationController()
         self.setUpCollectionView()
         self.setUpLayout()
         self.startLoadingEffect()
-        self.fetchData()
+        NetworkMonitor.shared.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NetworkMonitor.shared.startMonitoring()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NetworkMonitor.shared.stopMonitoring()
     }
     
     private func setUpnavigationController() {
@@ -92,26 +101,6 @@ class AdsViewController: UIViewController {
         self.adsCollectionView.delegate = self
         self.adsCollectionView.refreshControl = self.adsCollectionViewRefreshControl
         self.adsCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Sizes.tripleStandartOffset.rawValue + Sizes.bar.rawValue, right: 0)
-    }
-    
-    private func fetchData() {
-        NetworkManager.shared.fetchScreenData { [weak self] result in
-            switch result  {
-            case .success(let screenData):
-                self?.screenDataResult = screenData.result
-                self?.timer?.invalidate()
-                
-                DispatchQueue.main.async {
-                    self?.titleLabel.text = screenData.result.title
-                    self?.selectButton.setTitle(screenData.result.selectedActionTitle, for: .normal)
-                    self?.selectButton.backgroundColor = .softBlue
-                    self?.adsCollectionView.reloadData()
-                    self?.activityIndicator.stopAnimating()
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
     }
     
     private func setUpLayout() {
@@ -136,6 +125,26 @@ class AdsViewController: UIViewController {
         self.adsCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Sizes.standartOffset.rawValue).isActive = true
     }
     
+    private func fetchData() {
+        NetworkManager.shared.fetchScreenData { [weak self] result in
+            switch result  {
+            case .success(let screenData):
+                self?.screenDataResult = screenData.result
+                self?.timer?.invalidate()
+                
+                DispatchQueue.main.async {
+                    self?.titleLabel.text = screenData.result.title
+                    self?.selectButton.setTitle(screenData.result.selectedActionTitle, for: .normal)
+                    self?.selectButton.backgroundColor = .softBlue
+                    self?.adsCollectionView.reloadData()
+                    self?.activityIndicator.stopAnimating()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     private func startLoadingEffect() {
         var counter = 0
         self.activityIndicator.startAnimating()
@@ -156,12 +165,6 @@ class AdsViewController: UIViewController {
             }
         }
     }
-    
-    @objc private func refresh() {
-        self.fetchData()
-        self.adsCollectionViewRefreshControl.endRefreshing()
-    }
-    
     
     @objc private func selectButtonStartTouch (_ sender: UIButton) {
         UIView.animate(withDuration: 0.1) {
@@ -187,9 +190,17 @@ class AdsViewController: UIViewController {
         self.selectButton.backgroundColor = .softBlue
     }
     
+    @objc private func refresh() {
+        if NetworkMonitor.shared.isConntected {
+            self.fetchData()
+        } else {
+            Alert.showInternetConnectionErrorAlert(on: self)
+        }
+        self.adsCollectionViewRefreshControl.endRefreshing()
+    }
 }
 
-extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return screenDataResult?.list.count ?? 0
@@ -225,6 +236,19 @@ extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSourc
             if let currentSelectedIndexPath = self.currentSelectedIndexPath, let cellWillDeselect = self.adsCollectionView.cellForItem(at: currentSelectedIndexPath) as? AdCollectionViewCell {
                 self.currentSelectedIndexPath = nil
                 cellWillDeselect.deselect()
+            }
+        }
+    }
+}
+
+extension AdsViewController: NetworkMonitorDelegate {
+    func connectionHandler() {
+        if NetworkMonitor.shared.isConntected {
+            self.fetchData()
+        } else {
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+                Alert.showInternetConnectionErrorAlert(on: self)
             }
         }
     }

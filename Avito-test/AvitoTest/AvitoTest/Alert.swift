@@ -18,4 +18,11 @@ struct Alert {
         
         vs.present(alert, animated: true)
     }
+    
+    static func showInternetConnectionErrorAlert(on vs: UIViewController) {
+        let alert = UIAlertController(title: "Ошибка", message: "У вас проблемы с интернетом", preferredStyle: .alert)
+        let action = UIAlertAction(title: "ОК", style: .default)
+        alert.addAction(action)
+        vs.present(alert, animated: true)
+    }
 }

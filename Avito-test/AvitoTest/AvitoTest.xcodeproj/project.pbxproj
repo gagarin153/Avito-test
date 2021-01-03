@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F1A51CB25A1E821000FE11A /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A51CA25A1E821000FE11A /* Alert.swift */; };
+		2F1A51CF25A1E90B000FE11A /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A51CE25A1E90B000FE11A /* NetworkMonitor.swift */; };
 		2FB9367E25A1D4A100B51C57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB9367D25A1D4A100B51C57 /* AppDelegate.swift */; };
 		2FB9368025A1D4A100B51C57 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB9367F25A1D4A100B51C57 /* SceneDelegate.swift */; };
 		2FB9368725A1D4A200B51C57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FB9368625A1D4A200B51C57 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		2F1A51CA25A1E821000FE11A /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Alert.swift; path = AvitoTest/Alert.swift; sourceTree = SOURCE_ROOT; };
+		2F1A51CE25A1E90B000FE11A /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		2FB9367A25A1D4A100B51C57 /* AvitoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvitoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FB9367D25A1D4A100B51C57 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FB9367F25A1D4A100B51C57 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				2FB936B325A1DC5F00B51C57 /* NetworkManager.swift */,
+				2F1A51CE25A1E90B000FE11A /* NetworkMonitor.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				2F1A51CB25A1E821000FE11A /* Alert.swift in Sources */,
 				2FB936A825A1D85700B51C57 /* AdCollectionViewCell.swift in Sources */,
 				2FB936B025A1DC1400B51C57 /* ScreenData.swift in Sources */,
+				2F1A51CF25A1E90B000FE11A /* NetworkMonitor.swift in Sources */,
 				2FB9369625A1D53D00B51C57 /* AdsViewController.swift in Sources */,
 				2FB936BB25A1DCA300B51C57 /* NetworkError.swift in Sources */,
 				2FB9368025A1D4A100B51C57 /* SceneDelegate.swift in Sources */,
