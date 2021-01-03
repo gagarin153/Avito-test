@@ -3,6 +3,7 @@ import UIKit
 class AdsViewController: UIViewController {
 
     private var screenDataResult: ScreenDataResult?
+    private var timer: Timer?
     
     private let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
@@ -13,7 +14,7 @@ class AdsViewController: UIViewController {
     
     private let adsCollectionViewRefreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-       // refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        //refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return refreshControl
     }()
     
@@ -47,7 +48,7 @@ class AdsViewController: UIViewController {
     private let selectButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .softBlue
+        button.backgroundColor = .clear
         button.setTitle("", for: .normal)
         let radius: CGFloat = 5.0
         button.layer.cornerRadius = radius
@@ -62,11 +63,11 @@ class AdsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.view.backgroundColor = .white
         self.setUpnavigationController()
         self.setUpCollectionView()
         self.setUpLayout()
+        self.startLoadingEffect()
         self.fetchData()
     }
     
@@ -92,6 +93,7 @@ class AdsViewController: UIViewController {
             switch result  {
             case .success(let screenData):
                 self?.screenDataResult = screenData.result
+                self?.timer?.invalidate()
                 
                 DispatchQueue.main.async {
                     self?.titleLabel.text = screenData.result.title
@@ -107,8 +109,10 @@ class AdsViewController: UIViewController {
     }
     
     private func setUpLayout() {
-        [self.titleLabel, self.adsCollectionView, self.selectButton].forEach { self.view.addSubview($0)}
+        [self.titleLabel, self.adsCollectionView, self.selectButton, self.activityIndicator].forEach { self.view.addSubview($0)}
         
+        self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         
         self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: Sizes.standartOffset.rawValue).isActive = true
         self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -Sizes.standartOffset.rawValue).isActive = true
@@ -124,6 +128,27 @@ class AdsViewController: UIViewController {
         self.adsCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -Sizes.standartOffset.rawValue).isActive = true
         self.adsCollectionView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Sizes.standartOffset.rawValue).isActive = true
         self.adsCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Sizes.standartOffset.rawValue).isActive = true
+    }
+    
+    private func startLoadingEffect() {
+        var counter = 0
+        self.activityIndicator.startAnimating()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.55, repeats: true) { (timer) in
+            var currentTitleText: String {
+                switch self.titleLabel.text {
+                case "Загрузка.":       return "Загрузка.."
+                case "Загрузка..":      return "Загрузка..."
+                case "Загрузка...":     return "Загрузка."
+                default:                return "Загрузка"
+                }
+            }
+            self.titleLabel.text = currentTitleText
+            counter += 1
+            if counter == 50 {
+                timer.invalidate()
+                self.activityIndicator.stopAnimating()
+            }
+        }
     }
 
 }
