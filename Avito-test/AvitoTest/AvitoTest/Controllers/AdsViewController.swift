@@ -1,0 +1,18 @@
+//
+//  AdsViewController.swift
+//  AvitoTest
+//
+//  Created by Sultan on 03.01.2021.
+//
+
+import UIKit
+
+class AdsViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+
+}
