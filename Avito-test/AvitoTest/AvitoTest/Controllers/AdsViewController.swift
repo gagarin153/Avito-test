@@ -1,7 +1,7 @@
 import UIKit
 
 class AdsViewController: UIViewController {
-
+    
     private var screenDataResult: ScreenDataResult?
     private var timer: Timer?
     
@@ -14,7 +14,7 @@ class AdsViewController: UIViewController {
     
     private let adsCollectionViewRefreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        //refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return refreshControl
     }()
     
@@ -52,9 +52,9 @@ class AdsViewController: UIViewController {
         button.setTitle("", for: .normal)
         let radius: CGFloat = 5.0
         button.layer.cornerRadius = radius
-//        button.addTarget(self, action: #selector(selectButtonStartTouch), for: .touchDown)
-//        button.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
-//        button.addTarget(self, action: #selector(selectButtonCancelTapped), for: .touchDragExit)
+        //        button.addTarget(self, action: #selector(selectButtonStartTouch), for: .touchDown)
+        //        button.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
+        //        button.addTarget(self, action: #selector(selectButtonCancelTapped), for: .touchDragExit)
         button.isEnabled = false
         return button
     }()
@@ -150,7 +150,12 @@ class AdsViewController: UIViewController {
             }
         }
     }
-
+    
+    @objc private func refresh() {
+        self.fetchData()
+        self.adsCollectionViewRefreshControl.endRefreshing()
+    }
+    
 }
 
 extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -160,10 +165,10 @@ extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.reuseIdentifier, for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
         let screenDataResultlistItem = screenDataResult?.list[indexPath.item]
-       
+        
         cell.resultListItem = screenDataResultlistItem
         
         return cell
