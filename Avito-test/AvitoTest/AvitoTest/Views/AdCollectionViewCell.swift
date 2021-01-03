@@ -3,6 +3,13 @@ import UIKit
 class AdCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "AdCell"
 
+    var resultListItem: List? {
+        didSet {
+            self.adLabel.text = resultListItem?.title
+            self.adDescriptionLabel.text = resultListItem?.description
+            self.adPriceLabel.text = resultListItem?.price
+        }
+    }
     
     private lazy var width: NSLayoutConstraint = {
         let width = self.contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)

@@ -2,6 +2,8 @@ import UIKit
 
 class AdsViewController: UIViewController {
 
+    private var screenDataResult: ScreenDataResult?
+    
     private let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +32,7 @@ class AdsViewController: UIViewController {
         var layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             let width = UIScreen.main.bounds.size.width - 40
-            layout.estimatedItemSize = CGSize(width: width, height: 40)
+            layout.estimatedItemSize = CGSize(width: width, height: 1)
             return layout
         }()
         layout.scrollDirection = .vertical
@@ -65,7 +67,7 @@ class AdsViewController: UIViewController {
         self.setUpnavigationController()
         self.setUpCollectionView()
         self.setUpLayout()
-        
+        self.fetchData()
     }
     
     private func setUpnavigationController() {
@@ -83,6 +85,25 @@ class AdsViewController: UIViewController {
         self.adsCollectionView.delegate = self
         self.adsCollectionView.refreshControl = self.adsCollectionViewRefreshControl
         self.adsCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Sizes.tripleStandartOffset.rawValue + Sizes.bar.rawValue, right: 0)
+    }
+    
+    private func fetchData() {
+        NetworkManager.shared.fetchScreenData { [weak self] result in
+            switch result  {
+            case .success(let screenData):
+                self?.screenDataResult = screenData.result
+                
+                DispatchQueue.main.async {
+                    self?.titleLabel.text = screenData.result.title
+                    self?.selectButton.setTitle(screenData.result.selectedActionTitle, for: .normal)
+                    self?.selectButton.backgroundColor = .softBlue
+                    self?.adsCollectionView.reloadData()
+                    self?.activityIndicator.stopAnimating()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     private func setUpLayout() {
@@ -110,12 +131,16 @@ class AdsViewController: UIViewController {
 extension AdsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return screenDataResult?.list.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.reuseIdentifier, for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.reuseIdentifier, for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
+        let screenDataResultlistItem = screenDataResult?.list[indexPath.item]
+       
+        cell.resultListItem = screenDataResultlistItem
+        
         return cell
     }
     

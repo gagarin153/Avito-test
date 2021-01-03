@@ -16,6 +16,10 @@
 		2FB936A525A1D7A000B51C57 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936A425A1D79F00B51C57 /* Extensions.swift */; };
 		2FB936A825A1D85700B51C57 /* AdCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936A725A1D85700B51C57 /* AdCollectionViewCell.swift */; };
 		2FB936AD25A1D99F00B51C57 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936AC25A1D99F00B51C57 /* Images.swift */; };
+		2FB936B025A1DC1400B51C57 /* ScreenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936AF25A1DC1400B51C57 /* ScreenData.swift */; };
+		2FB936B425A1DC5F00B51C57 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936B325A1DC5F00B51C57 /* NetworkManager.swift */; };
+		2FB936B825A1DC8100B51C57 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936B725A1DC8100B51C57 /* URLs.swift */; };
+		2FB936BB25A1DCA300B51C57 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB936BA25A1DCA300B51C57 /* NetworkError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,10 @@
 		2FB936A425A1D79F00B51C57 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2FB936A725A1D85700B51C57 /* AdCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewCell.swift; sourceTree = "<group>"; };
 		2FB936AC25A1D99F00B51C57 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		2FB936AF25A1DC1400B51C57 /* ScreenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenData.swift; sourceTree = "<group>"; };
+		2FB936B325A1DC5F00B51C57 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		2FB936B725A1DC8100B51C57 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
+		2FB936BA25A1DCA300B51C57 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				2FB9369825A1D54E00B51C57 /* Supporting files */,
+				2FB936B225A1DC3B00B51C57 /* Services */,
 				2FB9369F25A1D72A00B51C57 /* Models */,
 				2FB9369A25A1D5E000B51C57 /* Controllers */,
 				2FB936AA25A1D86600B51C57 /* Views */,
@@ -96,6 +105,9 @@
 			children = (
 				2FB936A125A1D76B00B51C57 /* Sizes.swift */,
 				2FB936AC25A1D99F00B51C57 /* Images.swift */,
+				2FB936AF25A1DC1400B51C57 /* ScreenData.swift */,
+				2FB936B725A1DC8100B51C57 /* URLs.swift */,
+				2FB936BA25A1DCA300B51C57 /* NetworkError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -106,6 +118,14 @@
 				2FB936A725A1D85700B51C57 /* AdCollectionViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2FB936B225A1DC3B00B51C57 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2FB936B325A1DC5F00B51C57 /* NetworkManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,12 +197,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FB936B425A1DC5F00B51C57 /* NetworkManager.swift in Sources */,
 				2FB936AD25A1D99F00B51C57 /* Images.swift in Sources */,
 				2FB936A525A1D7A000B51C57 /* Extensions.swift in Sources */,
 				2FB936A225A1D76B00B51C57 /* Sizes.swift in Sources */,
 				2FB9367E25A1D4A100B51C57 /* AppDelegate.swift in Sources */,
+				2FB936B825A1DC8100B51C57 /* URLs.swift in Sources */,
 				2FB936A825A1D85700B51C57 /* AdCollectionViewCell.swift in Sources */,
+				2FB936B025A1DC1400B51C57 /* ScreenData.swift in Sources */,
 				2FB9369625A1D53D00B51C57 /* AdsViewController.swift in Sources */,
+				2FB936BB25A1DCA300B51C57 /* NetworkError.swift in Sources */,
 				2FB9368025A1D4A100B51C57 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
