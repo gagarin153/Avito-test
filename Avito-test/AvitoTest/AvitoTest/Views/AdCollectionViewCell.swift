@@ -8,6 +8,9 @@ class AdCollectionViewCell: UICollectionViewCell {
             self.adLabel.text = resultListItem?.title
             self.adDescriptionLabel.text = resultListItem?.description
             self.adPriceLabel.text = resultListItem?.price
+            if let iconURL = URL(string: resultListItem?.icon.iconURL ?? "") {
+                self.adImageView.load(url: iconURL)
+            }
         }
     }
     
